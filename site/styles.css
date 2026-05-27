@@ -665,6 +665,99 @@ strong { color: var(--text); font-weight: 600; }
   font-size: 0.9rem;
 }
 
+/* ========================== Localização (mapa embed) ========================== */
+
+.localizacao {
+  background: var(--bg-card);
+}
+
+.local-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 3rem;
+  align-items: stretch;
+  margin-top: 1rem;
+}
+
+.local-info {
+  background: var(--bg);
+  border: 1px solid var(--line-soft);
+  border-radius: var(--radius-card);
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  box-shadow: var(--shadow-card);
+}
+
+.local-address {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: var(--text);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.local-address strong {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.local-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line-soft);
+}
+
+.local-meta p {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  font-size: 0.95rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.local-icon {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bronze-soft);
+  color: var(--bronze);
+  display: grid;
+  place-items: center;
+  font-size: 0.95rem;
+  margin-top: 1px;
+}
+
+.local-info .btn-primary {
+  align-self: flex-start;
+  margin-top: 0.5rem;
+}
+
+.local-map {
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-lift);
+  min-height: 440px;
+  position: relative;
+  background: var(--bg-card-deep);
+}
+
+.local-map iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 440px;
+  border: 0;
+  display: block;
+  filter: saturate(0.85) contrast(0.96);
+}
+
 /* ========================== Footer ========================== */
 
 .site-footer {
@@ -727,6 +820,9 @@ strong { color: var(--text); font-weight: 600; }
   .card-split-text { padding: 2.5rem; }
   .two-col { grid-template-columns: 1fr; gap: 2.5rem; }
   .contato-grid { grid-template-columns: 1fr; }
+  .local-grid { grid-template-columns: 1fr; gap: 2rem; }
+  .local-info { padding: 2rem; }
+  .local-map, .local-map iframe { min-height: 360px; }
   .footer-inner { grid-template-columns: 1fr; }
 
   /* Mobile: foto continua no fundo, overlay vira vertical (escuro embaixo onde fica o texto) */
