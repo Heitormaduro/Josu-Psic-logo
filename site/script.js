@@ -36,23 +36,59 @@ if (header && hero) {
   headerObserver.observe(hero);
 }
 
-// Reveal on scroll (sutil)
-const observer = new IntersectionObserver(
+// Reveal on scroll — adiciona classe .in-view (CSS cuida da transição)
+const revealObserver = new IntersectionObserver(
   entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.style.opacity = '1';
-        entry.target.style.transform = 'translateY(0)';
-        observer.unobserve(entry.target);
+        entry.target.classList.add('in-view');
+        revealObserver.unobserve(entry.target);
       }
     });
   },
-  { threshold: 0.12, rootMargin: '0px 0px -50px 0px' }
+  { threshold: 0.14, rootMargin: '0px 0px -60px 0px' }
 );
 
-document.querySelectorAll('.feature-card, .contato-card, .card-split, .quiet-quote').forEach(el => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(20px)';
-  el.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
-  observer.observe(el);
+// Seletor amplo: títulos, subtítulos, eyebrows, cards e blocos de conteúdo
+const animatedSelectors = [
+  '.section-title',
+  '.section-sub',
+  '.section .eyebrow',
+  '.feature-card',
+  '.contato-card',
+  '.card-split',
+  '.quiet-quote',
+  '.local-info',
+  '.local-map',
+  '.two-col > div',
+  '.ghost-text'
+].join(', ');
+
+document.querySelectorAll(animatedSelectors).forEach(el => {
+  el.classList.add('fade-up');
+
+  // Stagger entre irmãos do mesmo container (cards em grid, contato cards, etc)
+  const parent = el.parentElement;
+  if (parent) {
+    const sameTypeSiblings = Array.from(parent.children).filter(c =>
+      c.classList.contains('feature-card') ||
+      c.classList.contains('contato-card')
+    );
+    if (sameTypeSiblings.length > 1) {
+      const idx = sameTypeSiblings.indexOf(el);
+      if (idx > -1) {
+        el.style.setProperty('--anim-delay', `${idx * 0.09}s`);
+      }
+    }
+  }
+
+  revealObserver.observe(el);
+});
+
+// Fecha menu mobile ao clicar em link âncora (smooth scroll é nativo via CSS)
+// e desfaz o foco pra não destacar o link após o scroll
+document.querySelectorAll('a[href^="#"]').forEach(link => {
+  link.addEventListener('click', () => {
+    if (document.activeElement) document.activeElement.blur();
+  });
 });
