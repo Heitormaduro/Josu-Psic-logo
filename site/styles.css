@@ -276,14 +276,14 @@ strong { color: var(--text); font-weight: 600; }
       rgba(123, 45, 46, 0.32),
       rgba(123, 45, 46, 0.32)
     ),
-    /* Camada 2 (em baixo): gradiente escuro lateral — escuro à esquerda pra texto legível, fade pra direita */
+    /* Camada 2 (em baixo): gradiente escuro lateral — bem escuro à esquerda, escurece também o lado direito sem zerar */
     linear-gradient(
       95deg,
-      rgba(12, 6, 4, 0.85) 0%,
-      rgba(12, 6, 4, 0.65) 28%,
-      rgba(12, 6, 4, 0.35) 55%,
-      rgba(12, 6, 4, 0.12) 80%,
-      rgba(12, 6, 4, 0.0) 100%
+      rgba(12, 6, 4, 0.92) 0%,
+      rgba(12, 6, 4, 0.75) 30%,
+      rgba(12, 6, 4, 0.55) 55%,
+      rgba(12, 6, 4, 0.40) 80%,
+      rgba(12, 6, 4, 0.30) 100%
     );
 }
 
