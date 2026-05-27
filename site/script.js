@@ -22,6 +22,20 @@ if (menuToggle && mainNav) {
 const anoEl = document.getElementById('ano');
 if (anoEl) anoEl.textContent = new Date().getFullYear();
 
+// Header switcha pra estado .scrolled (bordô) quando o hero sai de vista
+const header = document.querySelector('.site-header');
+const hero = document.querySelector('.hero');
+
+if (header && hero) {
+  const headerObserver = new IntersectionObserver(
+    ([entry]) => {
+      header.classList.toggle('scrolled', !entry.isIntersecting);
+    },
+    { threshold: 0, rootMargin: '-80px 0px 0px 0px' }
+  );
+  headerObserver.observe(hero);
+}
+
 // Reveal on scroll (sutil)
 const observer = new IntersectionObserver(
   entries => {

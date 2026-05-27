@@ -159,6 +159,46 @@ strong { color: var(--text); font-weight: 600; }
   backdrop-filter: blur(28px) saturate(180%);
   -webkit-backdrop-filter: blur(28px) saturate(180%);
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  transition: background 0.35s ease, border-color 0.35s ease;
+}
+
+/* Header text colors — cream/white pra legibilidade sobre fundo escuro (hero) ou bordô (scrolled) */
+.site-header .logo-text {
+  color: #FAF6F0;
+}
+
+.site-header .logo-text small {
+  color: rgba(250, 246, 240, 0.72);
+}
+
+.site-header .main-nav a {
+  color: rgba(250, 246, 240, 0.85);
+}
+
+.site-header .main-nav a:hover {
+  color: #FAF6F0;
+}
+
+.site-header .main-nav a::after {
+  background: #FAF6F0;
+}
+
+/* Estado .scrolled — header bordô quando passa do hero */
+.site-header.scrolled {
+  background: rgba(123, 45, 46, 0.88);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Botão CTA invertido no scrolled (bordô no bordô sumiria) */
+.site-header.scrolled .btn-primary {
+  background: #FAF6F0;
+  color: var(--accent);
+}
+
+.site-header.scrolled .btn-primary:hover {
+  background: #FFFFFF;
+  color: var(--accent-dark);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.22);
 }
 
 .header-inner {
