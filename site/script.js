@@ -1,4 +1,6 @@
-// Menu mobile
+// =====================================================
+// MENU MOBILE
+// =====================================================
 const menuToggle = document.getElementById('menuToggle');
 const mainNav = document.getElementById('mainNav');
 
@@ -8,8 +10,6 @@ if (menuToggle && mainNav) {
     menuToggle.setAttribute('aria-expanded', isOpen);
     menuToggle.setAttribute('aria-label', isOpen ? 'Fechar menu' : 'Abrir menu');
   });
-
-  // Fecha ao clicar em link
   mainNav.querySelectorAll('a').forEach(link => {
     link.addEventListener('click', () => {
       mainNav.classList.remove('open');
@@ -18,11 +18,15 @@ if (menuToggle && mainNav) {
   });
 }
 
-// Ano dinâmico no footer
+// =====================================================
+// ANO DINÂMICO NO FOOTER
+// =====================================================
 const anoEl = document.getElementById('ano');
 if (anoEl) anoEl.textContent = new Date().getFullYear();
 
-// Header switcha pra estado .scrolled (bordô) quando o hero sai de vista
+// =====================================================
+// HEADER: estado .scrolled (bordô) quando o hero sai de vista
+// =====================================================
 const header = document.querySelector('.site-header');
 const hero = document.querySelector('.hero');
 
@@ -36,22 +40,10 @@ if (header && hero) {
   headerObserver.observe(hero);
 }
 
-// Reveal on scroll — adiciona classe .in-view (CSS cuida da transição)
-const revealObserver = new IntersectionObserver(
-  entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  },
-  { threshold: 0.14, rootMargin: '0px 0px -60px 0px' }
-);
-
-// Seletor amplo: títulos, subtítulos, eyebrows decorativos sem efeito de opacidade,
-// cards e blocos de conteúdo. NUNCA incluir .ghost-text (opacity 0.025 puro estético).
-const animatedSelectors = [
+// =====================================================
+// SCROLL REVEAL — inline styles (estratégia simples e confiável)
+// =====================================================
+const REVEAL_SELECTORS = [
   '.section-title',
   '.section-sub',
   '.section .eyebrow',
@@ -64,41 +56,75 @@ const animatedSelectors = [
   '.two-col > div'
 ].join(', ');
 
-const animatedEls = document.querySelectorAll(animatedSelectors);
+const revealEls = document.querySelectorAll(REVEAL_SELECTORS);
 
-animatedEls.forEach(el => {
-  el.classList.add('fade-up');
+// Estado inicial: invisível + deslocado para baixo
+revealEls.forEach((el, i) => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(40px)';
+  el.style.transition = 'opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1), transform 0.9s cubic-bezier(0.22, 1, 0.36, 1)';
 
-  // Stagger entre irmãos do mesmo container (cards em grid)
+  // Stagger entre cards irmãos
   const parent = el.parentElement;
   if (parent) {
-    const sameTypeSiblings = Array.from(parent.children).filter(c =>
-      c.classList.contains('feature-card') ||
-      c.classList.contains('contato-card')
+    const siblingCards = Array.from(parent.children).filter(c =>
+      c.classList.contains('feature-card') || c.classList.contains('contato-card')
     );
-    if (sameTypeSiblings.length > 1) {
-      const idx = sameTypeSiblings.indexOf(el);
-      if (idx > -1) {
-        el.style.setProperty('--anim-delay', `${idx * 0.09}s`);
-      }
+    if (siblingCards.length > 1) {
+      const idx = siblingCards.indexOf(el);
+      if (idx > -1) el.style.transitionDelay = `${idx * 0.09}s`;
     }
   }
-
-  revealObserver.observe(el);
 });
 
-// Safety net: se algo travar (IntersectionObserver não disparar), garantir que
-// nenhum elemento .fade-up fique invisível pra sempre. Força .in-view após 2.5s.
-setTimeout(() => {
-  document.querySelectorAll('.fade-up:not(.in-view)').forEach(el => {
-    el.classList.add('in-view');
-  });
-}, 2500);
+const revealEl = (el) => {
+  el.style.opacity = '1';
+  el.style.transform = 'translateY(0)';
+};
 
-// Fecha menu mobile ao clicar em link âncora (smooth scroll é nativo via CSS)
-// e desfaz o foco pra não destacar o link após o scroll
+if ('IntersectionObserver' in window) {
+  const revealObserver = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          revealEl(entry.target);
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.12, rootMargin: '0px 0px -50px 0px' }
+  );
+  revealEls.forEach(el => revealObserver.observe(el));
+} else {
+  // Fallback: browsers antigos sem IntersectionObserver
+  revealEls.forEach(revealEl);
+}
+
+// Safety net: força tudo visível após 3s se algo travar
+setTimeout(() => {
+  revealEls.forEach(el => {
+    if (el.style.opacity === '0') revealEl(el);
+  });
+}, 3000);
+
+// =====================================================
+// SMOOTH SCROLL ao clicar em link âncora (backup do CSS nativo)
+// =====================================================
+const HEADER_OFFSET = 80;
+
 document.querySelectorAll('a[href^="#"]').forEach(link => {
-  link.addEventListener('click', () => {
+  link.addEventListener('click', (e) => {
+    const href = link.getAttribute('href');
+    if (!href || href === '#') return;
+
+    const target = document.querySelector(href);
+    if (!target) return;
+
+    e.preventDefault();
+    const top = target.getBoundingClientRect().top + window.pageYOffset - HEADER_OFFSET;
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+
+    // Desfoca o link pra não destacar após o scroll
     if (document.activeElement) document.activeElement.blur();
   });
 });
