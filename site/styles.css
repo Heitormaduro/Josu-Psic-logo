@@ -250,43 +250,70 @@ strong { color: var(--text); font-weight: 600; }
   transition: all 0.3s;
 }
 
-/* ========================== Hero (split: texto à esquerda + foto à direita) ========================== */
+/* ========================== Hero (full-bleed: foto fundo + dark gradient + bordô wash) ========================== */
 
 .hero {
   position: relative;
-  padding: 5rem 0 6rem;
+  min-height: clamp(580px, 86vh, 820px);
+  background-image: url('assets/josue.jpg');
+  background-size: cover;
+  background-position: 65% 18%;
+  display: flex;
+  align-items: center;
   overflow: hidden;
+  isolation: isolate;
 }
 
-.hero::before {
-  content: '';
+/* Overlay composto: bordô wash uniforme + gradiente escuro lateral */
+.hero-overlay {
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse at top right, rgba(123, 45, 46, 0.04), transparent 60%),
-    radial-gradient(ellipse at bottom left, rgba(182, 138, 79, 0.07), transparent 70%);
+  z-index: 0;
   pointer-events: none;
+  background:
+    /* Camada 1 (em cima): wash bordô uniforme — tinge a foto inteira */
+    linear-gradient(
+      rgba(123, 45, 46, 0.32),
+      rgba(123, 45, 46, 0.32)
+    ),
+    /* Camada 2 (em baixo): gradiente escuro lateral — escuro à esquerda pra texto legível, fade pra direita */
+    linear-gradient(
+      95deg,
+      rgba(12, 6, 4, 0.85) 0%,
+      rgba(12, 6, 4, 0.65) 28%,
+      rgba(12, 6, 4, 0.35) 55%,
+      rgba(12, 6, 4, 0.12) 80%,
+      rgba(12, 6, 4, 0.0) 100%
+    );
 }
 
 .hero-inner {
   position: relative;
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: 4rem;
-  align-items: center;
+  z-index: 1;
+  padding-top: 4rem;
+  padding-bottom: 5rem;
 }
 
-.hero-text { max-width: 560px; }
+.hero-text { max-width: 620px; color: #FAF6F0; }
+
+.hero-text .eyebrow {
+  color: #E3C68A;
+}
 
 .hero-title {
-  font-size: clamp(2.5rem, 5.5vw, 4.5rem);
-  margin: 1.2rem 0 1.8rem;
+  font-size: clamp(2.6rem, 5.8vw, 4.6rem);
+  margin: 1.4rem 0 1.8rem;
+  color: #FAF6F0;
+}
+
+.hero-title em {
+  color: #E3C68A;
 }
 
 .hero-sub {
-  font-size: 1.1rem;
-  color: var(--text-soft);
-  max-width: 500px;
+  font-size: 1.12rem;
+  color: rgba(250, 246, 240, 0.88);
+  max-width: 540px;
   margin-bottom: 2.5rem;
 }
 
@@ -296,30 +323,28 @@ strong { color: var(--text); font-weight: 600; }
   gap: 1rem;
 }
 
-.hero-image {
-  position: relative;
-  aspect-ratio: 4/5;
-  max-width: 460px;
-  justify-self: center;
-  width: 100%;
+/* Botão ghost variant pra fundo escuro */
+.btn-ghost-light {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.95rem 1.6rem;
+  border-radius: var(--radius-btn);
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+  background: rgba(250, 246, 240, 0.06);
+  color: #FAF6F0;
+  border: 1px solid rgba(250, 246, 240, 0.4);
 }
 
-.image-frame {
-  width: 100%;
-  height: 100%;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: var(--shadow-lift);
-  border: 1px solid var(--line);
-  background: var(--bg-card);
-}
-
-.image-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 25%;
-  display: block;
+.btn-ghost-light:hover {
+  background: rgba(250, 246, 240, 0.14);
+  border-color: #FAF6F0;
 }
 
 .image-placeholder {
@@ -378,6 +403,22 @@ strong { color: var(--text); font-weight: 600; }
   border-right: 1.5px solid var(--accent);
   border-bottom: 1.5px solid var(--accent);
   transform: translateX(-50%) rotate(45deg);
+}
+
+/* Variante clara pra hero full-bleed (overlay escuro) */
+.scroll-cue-light {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  z-index: 2;
+  border-color: rgba(250, 246, 240, 0.7);
+}
+
+.scroll-cue-light span {
+  border-right-color: rgba(250, 246, 240, 0.85);
+  border-bottom-color: rgba(250, 246, 240, 0.85);
 }
 
 @keyframes bounce {
@@ -634,14 +675,31 @@ strong { color: var(--text); font-weight: 600; }
 /* ========================== Responsivo ========================== */
 
 @media (max-width: 960px) {
-  .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
-  .hero-image { max-width: 360px; }
   .card-split { grid-template-columns: 1fr; }
   .card-split-image { min-height: 320px; }
   .card-split-text { padding: 2.5rem; }
   .two-col { grid-template-columns: 1fr; gap: 2.5rem; }
   .contato-grid { grid-template-columns: 1fr; }
   .footer-inner { grid-template-columns: 1fr; }
+
+  /* Mobile: foto continua no fundo, overlay vira vertical (escuro embaixo onde fica o texto) */
+  .hero { background-position: 60% 20%; min-height: clamp(560px, 92vh, 720px); align-items: flex-end; }
+  .hero-overlay {
+    background:
+      linear-gradient(
+        rgba(123, 45, 46, 0.28),
+        rgba(123, 45, 46, 0.28)
+      ),
+      linear-gradient(
+        to bottom,
+        rgba(12, 6, 4, 0.10) 0%,
+        rgba(12, 6, 4, 0.35) 40%,
+        rgba(12, 6, 4, 0.85) 75%,
+        rgba(12, 6, 4, 0.95) 100%
+      );
+  }
+  .hero-inner { padding-top: 6rem; padding-bottom: 4rem; }
+  .hero-text { max-width: 100%; }
 }
 
 @media (max-width: 720px) {
