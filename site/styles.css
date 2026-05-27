@@ -40,6 +40,7 @@ body {
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip; /* protege contra scroll horizontal causado por slide-in animations */
 }
 
 img { max-width: 100%; display: block; }
@@ -817,25 +818,25 @@ strong { color: var(--text); font-weight: 600; }
 
 /* ========================== Animações (CSS scroll-driven moderno) ========================== */
 
-/* Keyframes — direções variadas */
+/* Keyframes — direções variadas (distâncias moderadas pra evitar overflow) */
 @keyframes rise-in {
-  from { opacity: 0; transform: translateY(50px); }
+  from { opacity: 0; transform: translateY(40px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes drop-in {
-  from { opacity: 0; transform: translateY(-40px); }
+  from { opacity: 0; transform: translateY(-30px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes slide-in-left {
-  from { opacity: 0; transform: translateX(-60px); }
+  from { opacity: 0; transform: translateX(-40px); }
   to   { opacity: 1; transform: translateX(0); }
 }
 @keyframes slide-in-right {
-  from { opacity: 0; transform: translateX(60px); }
+  from { opacity: 0; transform: translateX(40px); }
   to   { opacity: 1; transform: translateX(0); }
 }
 @keyframes scale-in {
-  from { opacity: 0; transform: scale(0.9); }
+  from { opacity: 0; transform: scale(0.92); }
   to   { opacity: 1; transform: scale(1); }
 }
 
@@ -849,112 +850,63 @@ strong { color: var(--text); font-weight: 600; }
 .hero-text .hero-sub     { animation-delay: 0.55s; }
 .hero-text .hero-cta     { animation-delay: 0.75s; }
 
-/* === SCROLL REVEAL: animation-timeline: view() — Chrome/Edge 115+ ===
-   Ranges propositalmente tardios (entry 35-90%) — só anima quando o elemento
-   já está bem visível na tela, dando tempo do usuário ver o efeito. */
+/* === SCROLL REVEAL ===
+   Range único e consistente: entry 30% → entry 80%.
+   Anima só quando elemento JÁ TÁ VISÍVEL no viewport, dando tempo ao usuário. */
 @supports (animation-timeline: view()) {
 
-  /* Eyebrows entram da esquerda */
+  /* Defaults pra qualquer elemento animado: range e timeline iguais */
+  .section .section-title,
+  .section .section-sub,
   .section > .container > .eyebrow,
   .section .local-info .eyebrow,
-  .dependencia .eyebrow {
-    opacity: 0;
-    animation: slide-in-left linear both;
-    animation-timeline: view();
-    animation-range: entry 35% entry 85%;
-  }
-
-  /* Section titles entram de cima */
-  .section .section-title {
-    opacity: 0;
-    animation: drop-in linear both;
-    animation-timeline: view();
-    animation-range: entry 40% entry 90%;
-  }
-
-  /* Section subs entram de baixo */
-  .section .section-sub {
-    opacity: 0;
-    animation: rise-in linear both;
-    animation-timeline: view();
-    animation-range: entry 45% cover 5%;
-  }
-
-  /* Card-split (Sobre) — scale-in suave */
-  .card-split {
-    opacity: 0;
-    animation: scale-in linear both;
-    animation-timeline: view();
-    animation-range: entry 35% entry 95%;
-  }
-
-  /* Cards de Abordagem — alternando esquerda/direita */
-  .feature-card:nth-child(odd) {
-    opacity: 0;
-    animation: slide-in-left linear both;
-    animation-timeline: view();
-    animation-range: entry 40% cover 5%;
-  }
-  .feature-card:nth-child(even) {
-    opacity: 0;
-    animation: slide-in-right linear both;
-    animation-timeline: view();
-    animation-range: entry 40% cover 5%;
-  }
-
-  /* Dependência — texto da esquerda, quote da direita */
-  .two-col > div:nth-child(1) {
-    opacity: 0;
-    animation: slide-in-left linear both;
-    animation-timeline: view();
-    animation-range: entry 40% cover 5%;
-  }
-  .two-col > div:nth-child(2) {
-    opacity: 0;
-    animation: slide-in-right linear both;
-    animation-timeline: view();
-    animation-range: entry 45% cover 10%;
-  }
-
-  /* Cards de Contato — stagger de baixo */
-  .contato-card {
-    opacity: 0;
-    animation: rise-in linear both;
-    animation-timeline: view();
-    animation-range: entry 40% cover 5%;
-  }
-  .contato-card:nth-child(2) { animation-range: entry 45% cover 10%; }
-  .contato-card:nth-child(3) { animation-range: entry 50% cover 15%; }
-
-  /* Localização: info da esquerda, mapa da direita */
-  .local-info {
-    opacity: 0;
-    animation: slide-in-left linear both;
-    animation-timeline: view();
-    animation-range: entry 35% cover 0%;
-  }
-  .local-map {
-    opacity: 0;
-    animation: slide-in-right linear both;
-    animation-timeline: view();
-    animation-range: entry 40% cover 5%;
-  }
-
-  /* Footer — sobe de baixo */
+  .dependencia .eyebrow,
+  .card-split,
+  .feature-card,
+  .contato-card,
+  .two-col > div,
+  .quiet-quote,
+  .local-info,
+  .local-map,
   .site-footer .footer-inner > div,
-  .site-footer .footer-nav {
-    opacity: 0;
-    animation: rise-in linear both;
-    animation-timeline: view();
-    animation-range: entry 30% entry 80%;
-  }
-  .site-footer .footer-nav { animation-range: entry 35% entry 85%; }
+  .site-footer .footer-nav,
   .site-footer .footer-fine {
     opacity: 0;
-    animation: rise-in linear both;
     animation-timeline: view();
-    animation-range: entry 50% cover 10%;
+    animation-range: entry 30% entry 80%;
+    animation-duration: 1ms; /* scroll-driven sobrescreve, mas precisa existir */
+    animation-fill-mode: both;
+    animation-timing-function: linear;
   }
+
+  /* Direções específicas por tipo */
+  .section > .container > .eyebrow,
+  .section .local-info .eyebrow,
+  .dependencia .eyebrow      { animation-name: slide-in-left; }
+  .section .section-title    { animation-name: drop-in; }
+  .section .section-sub      { animation-name: rise-in; }
+  .card-split                { animation-name: scale-in; }
+
+  /* Cards Abordagem alternando esquerda/direita */
+  .feature-card:nth-child(odd)  { animation-name: slide-in-left; }
+  .feature-card:nth-child(even) { animation-name: slide-in-right; }
+
+  /* Cards Contato sobem de baixo */
+  .contato-card { animation-name: rise-in; }
+
+  /* Dependência: texto esquerda, quote direita */
+  .two-col > div:nth-child(1) { animation-name: slide-in-left; }
+  .two-col > div:nth-child(2) { animation-name: slide-in-right; }
+  .quiet-quote                { animation-name: slide-in-right; }
+
+  /* Localização: info esquerda, mapa direita */
+  .local-info { animation-name: slide-in-left; }
+  .local-map  { animation-name: slide-in-right; }
+
+  /* Footer sobe */
+  .site-footer .footer-inner > div,
+  .site-footer .footer-nav,
+  .site-footer .footer-fine { animation-name: rise-in; }
 }
 
 /* === HOVER POLISH (todo browser) === */
