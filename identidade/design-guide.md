@@ -85,10 +85,12 @@ itálico em palavras-chave.
 
 ## Foto do Josué
 
-- **Arquivo:** `identidade/josue.jpg` — retrato no consultório (poltrona de couro, estante de livros, luminária de banqueiro), camisa bordô
-- **Onde usar:** hero do site, seção "Sobre", carrosséis quando fizer sentido
+- **Arquivo master:** `identidade/josue.jpg` — retrato no consultório (poltrona de couro, estante de livros, luminária de banqueiro), camisa bordô
+- **Cópia pro site:** `site/assets/josue.jpg` — o Vercel só serve arquivos dentro de `site/`, então a foto precisa estar duplicada lá pra ser servida em produção. Quando trocar a foto, atualizar nos dois lugares.
+- **Onde usar:** hero do site (background full-bleed com overlay lateral bordô), seção "Sobre" (card split), carrosséis quando fizer sentido
 - **Tratamento:** sem filtros pesados, sem preto-e-branco forçado. Foto natural, postura sóbria, olhar direto.
-- **Cropping recomendado:** `object-fit: cover; object-position: center 30%;` pra focar no rosto/torso e manter o consultório no fundo
+- **Cropping no hero:** `background-position: 65% center;` (mostra ele à direita, deixando espaço à esquerda pro overlay + texto)
+- **Cropping na sobre:** `object-fit: cover; object-position: center 30%;` (foca rosto/torso)
 
 ---
 
