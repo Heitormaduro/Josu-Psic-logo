@@ -817,15 +817,26 @@ strong { color: var(--text); font-weight: 600; }
 
 /* ========================== Animações (CSS scroll-driven moderno) ========================== */
 
+/* Keyframes — direções variadas */
 @keyframes rise-in {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(50px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes drop-in {
+  from { opacity: 0; transform: translateY(-40px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(60px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
 /* === HERO: cascata no load (todo browser) === */
@@ -839,72 +850,110 @@ strong { color: var(--text); font-weight: 600; }
 .hero-text .hero-cta     { animation-delay: 0.75s; }
 
 /* === SCROLL REVEAL: animation-timeline: view() — Chrome/Edge 115+ ===
-   Cada elemento anima NATURALMENTE conforme entra na tela.
-   Sem JS, sem IntersectionObserver, sem race condition. */
+   Ranges propositalmente tardios (entry 35-90%) — só anima quando o elemento
+   já está bem visível na tela, dando tempo do usuário ver o efeito. */
 @supports (animation-timeline: view()) {
 
-  /* Títulos, subtítulos, eyebrows das seções */
-  .section .section-title,
-  .section .section-sub,
+  /* Eyebrows entram da esquerda */
   .section > .container > .eyebrow,
-  .local-info .eyebrow,
+  .section .local-info .eyebrow,
   .dependencia .eyebrow {
     opacity: 0;
-    animation: rise-in linear both;
+    animation: slide-in-left linear both;
     animation-timeline: view();
-    animation-range: entry 5% entry 50%;
+    animation-range: entry 35% entry 85%;
   }
 
-  /* Cards individuais (Abordagem) */
-  .feature-card {
+  /* Section titles entram de cima */
+  .section .section-title {
+    opacity: 0;
+    animation: drop-in linear both;
+    animation-timeline: view();
+    animation-range: entry 40% entry 90%;
+  }
+
+  /* Section subs entram de baixo */
+  .section .section-sub {
     opacity: 0;
     animation: rise-in linear both;
     animation-timeline: view();
-    animation-range: entry 10% entry 60%;
+    animation-range: entry 45% cover 5%;
   }
-  /* Stagger sutil entre os 4 cards da abordagem */
-  .feature-card:nth-child(2) { animation-range: entry 12% entry 62%; }
-  .feature-card:nth-child(3) { animation-range: entry 14% entry 64%; }
-  .feature-card:nth-child(4) { animation-range: entry 16% entry 66%; }
 
-  /* Cards de Contato */
+  /* Card-split (Sobre) — scale-in suave */
+  .card-split {
+    opacity: 0;
+    animation: scale-in linear both;
+    animation-timeline: view();
+    animation-range: entry 35% entry 95%;
+  }
+
+  /* Cards de Abordagem — alternando esquerda/direita */
+  .feature-card:nth-child(odd) {
+    opacity: 0;
+    animation: slide-in-left linear both;
+    animation-timeline: view();
+    animation-range: entry 40% cover 5%;
+  }
+  .feature-card:nth-child(even) {
+    opacity: 0;
+    animation: slide-in-right linear both;
+    animation-timeline: view();
+    animation-range: entry 40% cover 5%;
+  }
+
+  /* Dependência — texto da esquerda, quote da direita */
+  .two-col > div:nth-child(1) {
+    opacity: 0;
+    animation: slide-in-left linear both;
+    animation-timeline: view();
+    animation-range: entry 40% cover 5%;
+  }
+  .two-col > div:nth-child(2) {
+    opacity: 0;
+    animation: slide-in-right linear both;
+    animation-timeline: view();
+    animation-range: entry 45% cover 10%;
+  }
+
+  /* Cards de Contato — stagger de baixo */
   .contato-card {
     opacity: 0;
     animation: rise-in linear both;
     animation-timeline: view();
-    animation-range: entry 10% entry 60%;
+    animation-range: entry 40% cover 5%;
   }
-  .contato-card:nth-child(2) { animation-range: entry 12% entry 62%; }
-  .contato-card:nth-child(3) { animation-range: entry 14% entry 64%; }
+  .contato-card:nth-child(2) { animation-range: entry 45% cover 10%; }
+  .contato-card:nth-child(3) { animation-range: entry 50% cover 15%; }
 
-  /* Card-split (Sobre), two-col (Dependência), Localização */
-  .card-split,
-  .quiet-quote,
-  .local-info,
+  /* Localização: info da esquerda, mapa da direita */
+  .local-info {
+    opacity: 0;
+    animation: slide-in-left linear both;
+    animation-timeline: view();
+    animation-range: entry 35% cover 0%;
+  }
   .local-map {
     opacity: 0;
-    animation: rise-in linear both;
+    animation: slide-in-right linear both;
     animation-timeline: view();
-    animation-range: entry 10% entry 55%;
+    animation-range: entry 40% cover 5%;
   }
 
-  /* Two-col children entram com leve diferença */
-  .two-col > div {
+  /* Footer — sobe de baixo */
+  .site-footer .footer-inner > div,
+  .site-footer .footer-nav {
     opacity: 0;
     animation: rise-in linear both;
     animation-timeline: view();
-    animation-range: entry 10% entry 60%;
+    animation-range: entry 30% entry 80%;
   }
-  .two-col > div:nth-child(2) { animation-range: entry 14% entry 64%; }
-
-  /* Footer também ganha entrada */
-  .site-footer .footer-inner > div,
-  .site-footer .footer-nav,
+  .site-footer .footer-nav { animation-range: entry 35% entry 85%; }
   .site-footer .footer-fine {
     opacity: 0;
     animation: rise-in linear both;
     animation-timeline: view();
-    animation-range: entry 10% entry 60%;
+    animation-range: entry 50% cover 10%;
   }
 }
 
