@@ -8,6 +8,8 @@
 **Equipe:** Trabalha sozinho — sem secretária, sem outros profissionais
 **Ferramentas:** A definir
 **Principais entregas:** Sessões de psicoterapia individual com abordagem psicanalítica; atendimento especializado em dependência química
+**Site institucional:** https://josu-psicologo.vercel.app (deploy automático via Vercel a cada push em `main`)
+**Repositório GitHub:** https://github.com/Heitormaduro/Josu-Psic-logo (privado)
 
 ## Contexto adicional
 
