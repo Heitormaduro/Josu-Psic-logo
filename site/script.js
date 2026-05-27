@@ -49,7 +49,8 @@ const revealObserver = new IntersectionObserver(
   { threshold: 0.14, rootMargin: '0px 0px -60px 0px' }
 );
 
-// Seletor amplo: títulos, subtítulos, eyebrows, cards e blocos de conteúdo
+// Seletor amplo: títulos, subtítulos, eyebrows decorativos sem efeito de opacidade,
+// cards e blocos de conteúdo. NUNCA incluir .ghost-text (opacity 0.025 puro estético).
 const animatedSelectors = [
   '.section-title',
   '.section-sub',
@@ -60,14 +61,15 @@ const animatedSelectors = [
   '.quiet-quote',
   '.local-info',
   '.local-map',
-  '.two-col > div',
-  '.ghost-text'
+  '.two-col > div'
 ].join(', ');
 
-document.querySelectorAll(animatedSelectors).forEach(el => {
+const animatedEls = document.querySelectorAll(animatedSelectors);
+
+animatedEls.forEach(el => {
   el.classList.add('fade-up');
 
-  // Stagger entre irmãos do mesmo container (cards em grid, contato cards, etc)
+  // Stagger entre irmãos do mesmo container (cards em grid)
   const parent = el.parentElement;
   if (parent) {
     const sameTypeSiblings = Array.from(parent.children).filter(c =>
@@ -84,6 +86,14 @@ document.querySelectorAll(animatedSelectors).forEach(el => {
 
   revealObserver.observe(el);
 });
+
+// Safety net: se algo travar (IntersectionObserver não disparar), garantir que
+// nenhum elemento .fade-up fique invisível pra sempre. Força .in-view após 2.5s.
+setTimeout(() => {
+  document.querySelectorAll('.fade-up:not(.in-view)').forEach(el => {
+    el.classList.add('in-view');
+  });
+}, 2500);
 
 // Fecha menu mobile ao clicar em link âncora (smooth scroll é nativo via CSS)
 // e desfaz o foco pra não destacar o link após o scroll
