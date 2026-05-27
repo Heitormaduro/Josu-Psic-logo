@@ -250,91 +250,43 @@ strong { color: var(--text); font-weight: 600; }
   transition: all 0.3s;
 }
 
-/* ========================== Hero (full-bleed com foto de fundo + overlay) ========================== */
+/* ========================== Hero (split: texto à esquerda + foto à direita) ========================== */
 
 .hero {
   position: relative;
-  min-height: clamp(580px, 86vh, 820px);
-  background-image: url('assets/josue.jpg');
-  background-size: cover;
-  background-position: 65% 18%;
-  display: flex;
-  align-items: center;
+  padding: 5rem 0 6rem;
   overflow: hidden;
-  isolation: isolate;
 }
 
-/* Overlay duplo: marrom-preto denso à esquerda + wash bordô sutil em tudo (identidade sem vibrar) */
-.hero-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    /* Camada 1: wash bordô uniforme leve (dá o undertone avermelhado) */
-    linear-gradient(
-      to right,
-      rgba(123, 45, 46, 0.18),
-      rgba(123, 45, 46, 0.12)
-    ),
-    /* Camada 2: gradiente lateral principal — marrom-preto à esquerda, fade limpo */
-    linear-gradient(
-      95deg,
-      rgba(18, 10, 8, 0.96) 0%,
-      rgba(18, 10, 8, 0.92) 22%,
-      rgba(22, 12, 10, 0.74) 42%,
-      rgba(28, 16, 12, 0.42) 62%,
-      rgba(28, 16, 12, 0.18) 82%,
-      rgba(28, 16, 12, 0.08) 100%
-    );
-}
-
-/* Fade sutil e longo no rodapé pra costurar com a próxima seção creme */
-.hero::after {
+.hero::before {
   content: '';
   position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 240px;
-  z-index: 0;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at top right, rgba(123, 45, 46, 0.04), transparent 60%),
+    radial-gradient(ellipse at bottom left, rgba(182, 138, 79, 0.07), transparent 70%);
   pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    transparent 0%,
-    rgba(250, 246, 240, 0.0) 25%,
-    rgba(250, 246, 240, 0.25) 55%,
-    rgba(250, 246, 240, 0.65) 80%,
-    var(--bg) 100%
-  );
 }
 
 .hero-inner {
   position: relative;
-  z-index: 1;
-  display: block;
-  padding-top: 4rem;
-  padding-bottom: 5rem;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 4rem;
+  align-items: center;
 }
 
-.hero-text { max-width: 620px; color: #FAF6F0; }
-
-.hero-text .eyebrow {
-  color: #E3C68A;
-}
+.hero-text { max-width: 560px; }
 
 .hero-title {
-  font-size: clamp(2.6rem, 5.8vw, 4.6rem);
-  margin: 1.4rem 0 1.8rem;
-  color: #FAF6F0;
-}
-
-.hero-title em {
-  color: #E3C68A;
+  font-size: clamp(2.5rem, 5.5vw, 4.5rem);
+  margin: 1.2rem 0 1.8rem;
 }
 
 .hero-sub {
-  font-size: 1.12rem;
-  color: rgba(250, 246, 240, 0.88);
-  max-width: 540px;
+  font-size: 1.1rem;
+  color: var(--text-soft);
+  max-width: 500px;
   margin-bottom: 2.5rem;
 }
 
@@ -344,28 +296,30 @@ strong { color: var(--text); font-weight: 600; }
   gap: 1rem;
 }
 
-/* Variant de botão ghost pra fundo escuro */
-.btn-ghost-light {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.95rem 1.6rem;
-  border-radius: var(--radius-btn);
-  font-family: var(--sans);
-  font-size: 0.95rem;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  white-space: nowrap;
-  background: rgba(250, 246, 240, 0.06);
-  color: #FAF6F0;
-  border: 1px solid rgba(250, 246, 240, 0.4);
+.hero-image {
+  position: relative;
+  aspect-ratio: 4/5;
+  max-width: 460px;
+  justify-self: center;
+  width: 100%;
 }
 
-.btn-ghost-light:hover {
-  background: rgba(250, 246, 240, 0.14);
-  border-color: #FAF6F0;
+.image-frame {
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lift);
+  border: 1px solid var(--line);
+  background: var(--bg-card);
+}
+
+.image-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 25%;
+  display: block;
 }
 
 .image-placeholder {
@@ -424,22 +378,6 @@ strong { color: var(--text); font-weight: 600; }
   border-right: 1.5px solid var(--accent);
   border-bottom: 1.5px solid var(--accent);
   transform: translateX(-50%) rotate(45deg);
-}
-
-/* Variante clara pra hero full-bleed (overlay escuro) */
-.scroll-cue-light {
-  position: absolute;
-  bottom: 1.5rem;
-  left: 50%;
-  transform: translateX(-50%);
-  margin: 0;
-  z-index: 2;
-  border-color: rgba(250, 246, 240, 0.7);
-}
-
-.scroll-cue-light span {
-  border-right-color: rgba(250, 246, 240, 0.85);
-  border-bottom-color: rgba(250, 246, 240, 0.85);
 }
 
 @keyframes bounce {
@@ -696,27 +634,14 @@ strong { color: var(--text); font-weight: 600; }
 /* ========================== Responsivo ========================== */
 
 @media (max-width: 960px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .hero-image { max-width: 360px; }
   .card-split { grid-template-columns: 1fr; }
   .card-split-image { min-height: 320px; }
   .card-split-text { padding: 2.5rem; }
   .two-col { grid-template-columns: 1fr; gap: 2.5rem; }
   .contato-grid { grid-template-columns: 1fr; }
   .footer-inner { grid-template-columns: 1fr; }
-
-  /* Em mobile/tablet, overlay vira vertical (escuro embaixo onde fica o texto) */
-  .hero { background-position: 60% 20%; min-height: clamp(560px, 92vh, 720px); align-items: flex-end; }
-  .hero-overlay {
-    background:
-      linear-gradient(
-        to bottom,
-        rgba(18, 10, 8, 0.10) 0%,
-        rgba(18, 10, 8, 0.28) 35%,
-        rgba(18, 10, 8, 0.85) 72%,
-        rgba(18, 10, 8, 0.95) 100%
-      );
-  }
-  .hero-inner { padding-top: 6rem; padding-bottom: 4rem; }
-  .hero-text { max-width: 100%; }
 }
 
 @media (max-width: 720px) {
