@@ -944,6 +944,7 @@ strong { color: var(--text); font-weight: 600; }
 
 /* ========================== Responsivo ========================== */
 
+/* ===== TABLET (≤ 960px) ===== */
 @media (max-width: 960px) {
   .card-split { grid-template-columns: 1fr; }
   .card-split-image { min-height: 320px; }
@@ -955,44 +956,112 @@ strong { color: var(--text); font-weight: 600; }
   .local-map, .local-map iframe { min-height: 360px; }
   .footer-inner { grid-template-columns: 1fr; }
 
-  /* Mobile: foto continua no fundo, overlay vira vertical (escuro embaixo onde fica o texto) */
-  .hero { background-position: 60% 20%; min-height: clamp(560px, 92vh, 720px); align-items: flex-end; }
+  /* Hero: foto no fundo, overlay vira vertical (escuro embaixo), texto ancora no rodapé */
+  .hero {
+    background-position: 62% 18%;
+    min-height: 88vh;
+    align-items: flex-end;
+    padding-top: 84px;
+  }
   .hero-overlay {
     background:
       linear-gradient(
-        rgba(123, 45, 46, 0.28),
-        rgba(123, 45, 46, 0.28)
+        rgba(123, 45, 46, 0.26),
+        rgba(123, 45, 46, 0.26)
       ),
       linear-gradient(
         to bottom,
-        rgba(12, 6, 4, 0.10) 0%,
-        rgba(12, 6, 4, 0.35) 40%,
-        rgba(12, 6, 4, 0.85) 75%,
-        rgba(12, 6, 4, 0.95) 100%
+        rgba(12, 6, 4, 0.05) 0%,
+        rgba(12, 6, 4, 0.30) 38%,
+        rgba(12, 6, 4, 0.82) 74%,
+        rgba(12, 6, 4, 0.94) 100%
       );
   }
-  .hero-inner { padding-top: 6rem; padding-bottom: 4rem; }
+  .hero-inner { padding-top: 2rem; padding-bottom: 3.5rem; }
   .hero-text { max-width: 100%; }
 }
 
+/* ===== MOBILE (≤ 720px) ===== */
 @media (max-width: 720px) {
+  /* --- Header: hamburger --- */
   .main-nav, .header-cta { display: none; }
   .menu-toggle { display: flex; }
+  .menu-toggle span { background: #FFFFFF; } /* branco pra ver sobre header transparente */
+
+  /* Quando o menu abre, o header todo vira bordô (coeso com o dropdown) */
+  .site-header:has(.main-nav.open) {
+    background: rgba(123, 45, 46, 0.97);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+  }
+
+  /* Menu aberto: dropdown bordô (legível com links brancos) */
   .main-nav.open {
     display: flex;
     position: absolute;
     top: 100%;
     left: 0;
     right: 0;
-    background: var(--bg);
+    background: rgba(123, 45, 46, 0.97);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
     flex-direction: column;
-    padding: 1.5rem 24px;
-    gap: 1.2rem;
-    border-bottom: 1px solid var(--line-soft);
-    box-shadow: var(--shadow-card);
+    gap: 0;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 12px 30px rgba(31, 20, 16, 0.25);
   }
+  .main-nav.open a {
+    color: #FFFFFF !important;
+    padding: 0.95rem 24px;
+    font-size: 1rem;
+    width: 100%;
+  }
+  .main-nav.open a::after { display: none; } /* sem underline no mobile */
+  .main-nav.open a:active { background: rgba(255, 255, 255, 0.10); }
+
+  /* --- Header inner: garante logo legível mesmo transparente --- */
+  .logo-text { font-size: 1rem; }
+
+  /* --- Layout geral --- */
   .grid-cards { grid-template-columns: 1fr; }
   .section { padding: 4rem 0; }
-  .hero { padding: 3rem 0 4rem; }
+  .container { padding: 0 20px; }
+
+  /* --- Hero mobile --- */
+  .hero { min-height: 90vh; padding-top: 72px; }
+  .hero-title { font-size: clamp(2rem, 9vw, 2.8rem); margin-bottom: 1.5rem; }
+  .hero-sub { font-size: 1.02rem; margin-bottom: 2rem; }
+  .hero-inner { padding-bottom: 3rem; }
+
+  /* --- Seções: texto e títulos --- */
   .card-split-text { padding: 2rem 1.5rem; }
+  .quiet-quote { padding: 2rem 1.5rem; }
+  .quiet-quote p { font-size: 1.3rem; }
+  .local-info { padding: 1.75rem; }
+  .local-address { font-size: 1.35rem; }
+
+  /* --- Footer --- */
+  .site-footer { padding: 3rem 0 1.5rem; }
+}
+
+/* ===== CELULAR PEQUENO (≤ 480px) ===== */
+@media (max-width: 480px) {
+  .container { padding: 0 18px; }
+
+  /* Botões do hero empilham e ocupam largura total */
+  .hero-cta { flex-direction: column; align-items: stretch; gap: 0.75rem; }
+  .hero-cta .btn,
+  .hero-cta .btn-ghost-light { justify-content: center; width: 100%; }
+
+  .hero-title { font-size: clamp(1.85rem, 9vw, 2.4rem); }
+  .section-title { font-size: clamp(1.7rem, 7.5vw, 2.2rem); }
+  .section-sub { font-size: 1.1rem; }
+
+  .feature-card { padding: 1.6rem; }
+  .contato-card { padding: 2rem 1.5rem; }
+  .card-split-text { padding: 1.75rem 1.25rem; }
+
+  /* Localização: botão full width */
+  .local-info .btn-primary { align-self: stretch; justify-content: center; }
 }
