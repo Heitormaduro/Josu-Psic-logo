@@ -867,16 +867,8 @@ strong { color: var(--text); font-weight: 600; }
   transform: scale(1.04);
 }
 
-/* Respeita preferência do usuário por menos movimento */
-@media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
+/* Nota: removida a regra @media (prefers-reduced-motion: reduce) — estava
+   zerando todas as animações pra usuários com "Reduzir movimento" ativado no SO. */
 
 /* ========================== Responsivo ========================== */
 
