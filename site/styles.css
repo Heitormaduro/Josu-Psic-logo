@@ -315,6 +315,7 @@ strong { color: var(--text); font-weight: 600; }
   align-items: center;
   overflow: hidden;
   isolation: isolate;
+  padding-top: 84px; /* clearance pro header fixed — conteúdo centra abaixo dele */
 }
 
 /* Overlay composto: bordô wash uniforme + gradiente escuro lateral */
@@ -357,7 +358,7 @@ strong { color: var(--text); font-weight: 600; }
   font-size: clamp(2.4rem, 5.2vw, 4.2rem);
   line-height: 1.28;
   letter-spacing: -0.015em;
-  margin: 1.6rem 0 2rem;
+  margin: 0 0 2rem;
   color: #FAF6F0;
 }
 
