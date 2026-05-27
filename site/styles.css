@@ -254,39 +254,31 @@ strong { color: var(--text); font-weight: 600; }
 
 .hero {
   position: relative;
-  min-height: clamp(580px, 88vh, 820px);
+  min-height: clamp(580px, 86vh, 820px);
   background-image: url('assets/josue.jpg');
   background-size: cover;
-  background-position: 65% center;
+  background-position: 65% 18%;
   display: flex;
   align-items: center;
   overflow: hidden;
   isolation: isolate;
 }
 
-/* Overlay lateral: marrom-preto profundo → wash sutil (transição longa, sem corte) */
+/* Overlay lateral simples: marrom-preto denso à esquerda → fade limpo à direita */
 .hero-overlay {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background:
-    /* Vinhete radial sutil pra acabamento cinematográfico */
-    radial-gradient(
-      ellipse 120% 100% at 70% 50%,
-      transparent 35%,
-      rgba(20, 12, 10, 0.35) 100%
-    ),
-    /* Gradiente lateral principal — marrom-preto à esquerda, fade longo */
-    linear-gradient(
-      95deg,
-      rgba(18, 10, 8, 0.92) 0%,
-      rgba(28, 16, 12, 0.85) 20%,
-      rgba(40, 22, 18, 0.65) 40%,
-      rgba(50, 28, 22, 0.40) 58%,
-      rgba(50, 28, 22, 0.22) 75%,
-      rgba(50, 28, 22, 0.15) 100%
-    );
+  background: linear-gradient(
+    95deg,
+    rgba(18, 10, 8, 0.97) 0%,
+    rgba(18, 10, 8, 0.94) 22%,
+    rgba(22, 12, 10, 0.78) 42%,
+    rgba(28, 16, 12, 0.45) 62%,
+    rgba(28, 16, 12, 0.18) 82%,
+    rgba(28, 16, 12, 0.10) 100%
+  );
 }
 
 /* Fade sutil no rodapé pra costurar com a próxima seção creme */
