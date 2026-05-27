@@ -815,9 +815,8 @@ strong { color: var(--text); font-weight: 600; }
   line-height: 1.6;
 }
 
-/* ========================== Animações (CSS puro, zero JS) ========================== */
+/* ========================== Animações (CSS scroll-driven moderno) ========================== */
 
-/* Animação universal de entrada (rise + fade) */
 @keyframes rise-in {
   from {
     opacity: 0;
@@ -829,7 +828,7 @@ strong { color: var(--text); font-weight: 600; }
   }
 }
 
-/* === Hero: cascata no load === */
+/* === HERO: cascata no load (todo browser) === */
 .hero-text > * {
   opacity: 0;
   animation: rise-in 1.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
@@ -839,59 +838,77 @@ strong { color: var(--text); font-weight: 600; }
 .hero-text .hero-sub     { animation-delay: 0.55s; }
 .hero-text .hero-cta     { animation-delay: 0.75s; }
 
-/* === Section titles e subs === */
-.section .section-title,
-.section .section-sub,
-.section > .container > .eyebrow,
-.local-info .eyebrow {
-  opacity: 0;
-  animation: rise-in 1s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
+/* === SCROLL REVEAL: animation-timeline: view() — Chrome/Edge 115+ ===
+   Cada elemento anima NATURALMENTE conforme entra na tela.
+   Sem JS, sem IntersectionObserver, sem race condition. */
+@supports (animation-timeline: view()) {
+
+  /* Títulos, subtítulos, eyebrows das seções */
+  .section .section-title,
+  .section .section-sub,
+  .section > .container > .eyebrow,
+  .local-info .eyebrow,
+  .dependencia .eyebrow {
+    opacity: 0;
+    animation: rise-in linear both;
+    animation-timeline: view();
+    animation-range: entry 5% entry 50%;
+  }
+
+  /* Cards individuais (Abordagem) */
+  .feature-card {
+    opacity: 0;
+    animation: rise-in linear both;
+    animation-timeline: view();
+    animation-range: entry 10% entry 60%;
+  }
+  /* Stagger sutil entre os 4 cards da abordagem */
+  .feature-card:nth-child(2) { animation-range: entry 12% entry 62%; }
+  .feature-card:nth-child(3) { animation-range: entry 14% entry 64%; }
+  .feature-card:nth-child(4) { animation-range: entry 16% entry 66%; }
+
+  /* Cards de Contato */
+  .contato-card {
+    opacity: 0;
+    animation: rise-in linear both;
+    animation-timeline: view();
+    animation-range: entry 10% entry 60%;
+  }
+  .contato-card:nth-child(2) { animation-range: entry 12% entry 62%; }
+  .contato-card:nth-child(3) { animation-range: entry 14% entry 64%; }
+
+  /* Card-split (Sobre), two-col (Dependência), Localização */
+  .card-split,
+  .quiet-quote,
+  .local-info,
+  .local-map {
+    opacity: 0;
+    animation: rise-in linear both;
+    animation-timeline: view();
+    animation-range: entry 10% entry 55%;
+  }
+
+  /* Two-col children entram com leve diferença */
+  .two-col > div {
+    opacity: 0;
+    animation: rise-in linear both;
+    animation-timeline: view();
+    animation-range: entry 10% entry 60%;
+  }
+  .two-col > div:nth-child(2) { animation-range: entry 14% entry 64%; }
+
+  /* Footer também ganha entrada */
+  .site-footer .footer-inner > div,
+  .site-footer .footer-nav,
+  .site-footer .footer-fine {
+    opacity: 0;
+    animation: rise-in linear both;
+    animation-timeline: view();
+    animation-range: entry 10% entry 60%;
+  }
 }
 
-/* === Cards (Abordagem) — stagger via nth-child === */
-.feature-card {
-  opacity: 0;
-  animation: rise-in 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-.feature-card:nth-child(1) { animation-delay: 0.20s; }
-.feature-card:nth-child(2) { animation-delay: 0.32s; }
-.feature-card:nth-child(3) { animation-delay: 0.44s; }
-.feature-card:nth-child(4) { animation-delay: 0.56s; }
-
-/* === Cards de Contato === */
-.contato-card {
-  opacity: 0;
-  animation: rise-in 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-.contato-card:nth-child(1) { animation-delay: 0.20s; }
-.contato-card:nth-child(2) { animation-delay: 0.32s; }
-.contato-card:nth-child(3) { animation-delay: 0.44s; }
-
-/* === Card-split (Sobre) === */
-.card-split {
-  opacity: 0;
-  animation: rise-in 1s cubic-bezier(0.22, 1, 0.36, 1) 0.2s forwards;
-}
-
-/* === Two-col (Dependência) === */
-.two-col > div {
-  opacity: 0;
-  animation: rise-in 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-.two-col > div:nth-child(1) { animation-delay: 0.20s; }
-.two-col > div:nth-child(2) { animation-delay: 0.36s; }
-
-/* === Localização === */
-.local-info {
-  opacity: 0;
-  animation: rise-in 1s cubic-bezier(0.22, 1, 0.36, 1) 0.20s forwards;
-}
-.local-map {
-  opacity: 0;
-  animation: rise-in 1s cubic-bezier(0.22, 1, 0.36, 1) 0.36s forwards;
-}
-
-/* === Hover polish === */
+/* === HOVER POLISH (todo browser) === */
 .logo {
   transition: transform 0.25s ease;
 }
@@ -909,6 +926,11 @@ strong { color: var(--text); font-weight: 600; }
 .feature-card,
 .contato-card {
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.btn,
+.btn-ghost-light {
+  transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 /* Nota: removida a regra @media (prefers-reduced-motion: reduce) — estava
