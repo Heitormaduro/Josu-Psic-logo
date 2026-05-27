@@ -1028,11 +1028,18 @@ strong { color: var(--text); font-weight: 600; }
   .section { padding: 4rem 0; }
   .container { padding: 0 20px; }
 
-  /* --- Hero mobile --- */
-  .hero { min-height: 90vh; padding-top: 72px; }
+  /* --- Hero mobile: preenche a tela toda --- */
+  .hero {
+    min-height: 100vh;       /* fallback */
+    min-height: 100dvh;      /* altura dinâmica — preenche a tela considerando a barra do navegador */
+    padding-top: 72px;
+  }
   .hero-title { font-size: clamp(2rem, 9vw, 2.8rem); margin-bottom: 1.5rem; }
   .hero-sub { font-size: 1.02rem; margin-bottom: 2rem; }
   .hero-inner { padding-bottom: 3rem; }
+
+  /* Esconde o scroll-cue no mobile (sobrepunha os botões, já que o texto ancora no rodapé) */
+  .scroll-cue { display: none; }
 
   /* --- Seções: texto e títulos --- */
   .card-split-text { padding: 2rem 1.5rem; }
