@@ -264,32 +264,47 @@ strong { color: var(--text); font-weight: 600; }
   isolation: isolate;
 }
 
-/* Overlay lateral simples: marrom-preto denso à esquerda → fade limpo à direita */
+/* Overlay duplo: marrom-preto denso à esquerda + wash bordô sutil em tudo (identidade sem vibrar) */
 .hero-overlay {
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: linear-gradient(
-    95deg,
-    rgba(18, 10, 8, 0.97) 0%,
-    rgba(18, 10, 8, 0.94) 22%,
-    rgba(22, 12, 10, 0.78) 42%,
-    rgba(28, 16, 12, 0.45) 62%,
-    rgba(28, 16, 12, 0.18) 82%,
-    rgba(28, 16, 12, 0.10) 100%
-  );
+  background:
+    /* Camada 1: wash bordô uniforme leve (dá o undertone avermelhado) */
+    linear-gradient(
+      to right,
+      rgba(123, 45, 46, 0.18),
+      rgba(123, 45, 46, 0.12)
+    ),
+    /* Camada 2: gradiente lateral principal — marrom-preto à esquerda, fade limpo */
+    linear-gradient(
+      95deg,
+      rgba(18, 10, 8, 0.96) 0%,
+      rgba(18, 10, 8, 0.92) 22%,
+      rgba(22, 12, 10, 0.74) 42%,
+      rgba(28, 16, 12, 0.42) 62%,
+      rgba(28, 16, 12, 0.18) 82%,
+      rgba(28, 16, 12, 0.08) 100%
+    );
 }
 
-/* Fade sutil no rodapé pra costurar com a próxima seção creme */
+/* Fade sutil e longo no rodapé pra costurar com a próxima seção creme */
 .hero::after {
   content: '';
   position: absolute;
   left: 0; right: 0; bottom: 0;
-  height: 120px;
+  height: 240px;
   z-index: 0;
   pointer-events: none;
-  background: linear-gradient(to bottom, transparent, var(--bg) 95%);
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(250, 246, 240, 0.0) 25%,
+    rgba(250, 246, 240, 0.25) 55%,
+    rgba(250, 246, 240, 0.65) 80%,
+    var(--bg) 100%
+  );
 }
 
 .hero-inner {
